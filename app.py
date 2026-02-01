@@ -1,21 +1,23 @@
 """
 FastAPI Application for Legal Contract Analysis
-
-This module provides a web UI and API endpoints for the contract analyzer.
 """
 
 import os
 from pathlib import Path
 from typing import Optional
-from dotenv import load_dotenv
+
+# Load environment variables from .env.local (for local development)
+try:
+    from dotenv import load_dotenv
+    env_path = Path(__file__).parent / ".env.local"
+    if env_path.exists():
+        load_dotenv(env_path)
+except ImportError:
+    pass  # python-dotenv not required in production
+
 from fastapi import FastAPI, Request, Form, HTTPException
 from fastapi.responses import HTMLResponse, JSONResponse
-from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
-
-# Load environment variables from .env.local
-env_path = Path(__file__).parent / ".env.local"
-load_dotenv(env_path)
 
 from contract_analyzer import ContractAnalyzer, ContractAnalysisResult
 
